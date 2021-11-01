@@ -22,6 +22,7 @@ async function run() {
         const database = client.db('airlines');
         const emptyLegsCollection = database.collection('emptyLeg');
         const blogPostCollection = database.collection('blogPost');
+        const bookingCollection = database.collection('booking');
 
         // GET EmptyLegs API
         app.get('/emptyLegs', async (req, res) => {
@@ -43,6 +44,36 @@ async function run() {
             const query = { _id: ObjectId(id) };
             const schedules = await emptyLegsCollection.findOne(query);
             res.json(schedules);
+        })
+
+        // POST Booking API
+        app.post('/booking', async (req, res) => {
+            const booking = req.body;
+            const result = await bookingCollection.insertOne(booking);
+            res.json(result);
+        })
+
+        // GET All Bookings
+        app.get('/booking', async (req, res) => {
+            const cursor = bookingCollection.find({});
+            const bookings = await cursor.toArray();
+            res.send(bookings);
+        });
+
+        // GET Single Bookings 
+        app.get('/booking/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const bookingId = await bookingCollection.findOne(query);
+            res.json(bookingId);
+        })
+
+        // DELETE API From Booking
+        app.delete('/booking/:id', async(req, res)=> {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await bookingCollection.deleteOne(query);
+            res.json(result);
         })
     }
     finally {
