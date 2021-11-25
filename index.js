@@ -32,7 +32,7 @@ async function run() {
         });
 
         // GET BlogPost API
-        app.get('/blogPost', async (req, res) => {
+        app.get('/blogs', async (req, res) => {
             const cursor = blogPostCollection.find({});
             const article = await cursor.toArray();
             res.send(article);
