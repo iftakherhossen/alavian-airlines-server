@@ -60,6 +60,15 @@ async function run() {
             res.send(bookings);
         });
 
+        // GET All Bookings with Email
+        app.get('/booking/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email: email };
+            const cursor = bookingCollection.find(query);
+            const booking = await cursor.toArray();
+            res.json(booking);
+        })
+
         // GET Single Bookings 
         app.get('/booking/:id', async (req, res) => {
             const id = req.params.id;
